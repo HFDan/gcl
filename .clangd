@@ -1,0 +1,30 @@
+CompileFlags:
+  CompilationDatabase: ./Build
+
+Diagnostics:
+  ClangTidy:
+    Add:
+      - "*"
+    Remove:
+      - "abseil-*"
+      - "altera-*"
+      - "android-*"
+      - "darwin-*"
+      - "fuchsia-*"
+      - "linuxkernel-*"
+      - "llvm-*"
+      - "llvmlibc-*"
+      - "mpi-*"
+      - "objc-*"
+      - "openmp-*"
+      - "zircon-*" 
+      - "cppcoreguidelines-pro-type-vararg"
+      - "hicpp-vararg"
+      - "hicpp-signed-bitwise"
+      - "cppcoreguidelines-pro-type-member-init"
+      - "hicpp-member-init"
+      - "performance-no-int-to-ptr"
+      - "cppcoreguidelines-pro-type-cstyle-cast"
+      - "cppcoreguidelines-pro-type-reinterpret-cast"
+      - "cppcoreguidelines-pro-bounds-pointer-arithmetic"
+      - "misc-non-private-member-variables-in-classes"

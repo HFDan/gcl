@@ -1,0 +1,11 @@
+// this is a comment
+
+native puts(string);
+
+int main(int argc, string[] argv) {
+
+    for (int i = 1; i < argc; i++)
+        puts(argv[i] + "\n");
+
+    return 0;
+}
