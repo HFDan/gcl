@@ -4,6 +4,7 @@
 
 #include <type_traits>
 
+#include "VM/Instructions/instructions.hpp"
 #include "endian.hpp"
 
 #ifdef __linux__
@@ -125,20 +126,28 @@ namespace gcl {
 
         registers.ip = reinterpret_cast<instruction*>(&(mainFunctionEntry->code[0]));
 
-        // TODO: Execution loop
+        {
+            const auto opcode = *registers.ip;
+            registers.ip += sizeof(opcode);
+
+            instructionFunctions.at(opcode)(*this);
+        }
     }
 
 #ifdef __linux__
-    template <class T>
-    auto VM::ResolveNativeFunction(std::string_view functionSignature) -> std::optional<T> {
-        static_assert(std::is_function_v<T>, "T must be a function type");
-        const auto* const resolved = dlsym(RTLD_DEFAULT, functionSignature.data());
+    auto VM::ResolveNativeFunction(std::string_view functionSignature) -> std::optional<void*> {
+        std::string funcname;
+        for (auto it : functionSignature) {
+            funcname += it;
+        }
+
+        const auto* const resolved = dlsym(RTLD_DEFAULT, funcname.c_str());
 
         if (resolved == nullptr) {
             return std::nullopt;
         }
 
-        return reinterpret_cast<T>(resolved);
+        return const_cast<void*>(resolved);
     }
 #endif
 }  // namespace gcl

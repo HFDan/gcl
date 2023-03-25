@@ -3,10 +3,7 @@
 #include "VM/vm.hpp"
 
 auto main(int argc, char** argv) -> int {
-    fmt::print("Test print\n");
-    fmt::print(stderr, "Test error\n");
-
-    gcl::VM vm(2048);
+    gcl::VM vm(2040);
     vm.Load("lmao.gcl");
 
     asm volatile("nop");

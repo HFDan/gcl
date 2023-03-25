@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <unordered_map>
 #include <vector>
+#include <functional>
 
 #include "file.hpp"
 #include "opcodes.hpp"
@@ -25,27 +26,27 @@ namespace gcl {
 
         ~VM();
 
-       private:
-        static constexpr std::string MainFunctionSignature{"main(Is[])I"};
-
         struct {
             instruction* ip{nullptr};
             uint8_t* sp{nullptr};
         } registers;
-
-        void* mappedFile{nullptr};
-        void* functionVectorLocation{nullptr};
-        uint8_t* stack{nullptr};
 
         std::unordered_map<std::string_view, const FunctionInfo*> functionTable;  // Note: Might need to un-const
                                                                                   // FunctionInfo if we want to
                                                                                   // support bytecode patching
         std::vector<const gcl::DataInfo*> constDataPool;
 
+        static auto ResolveNativeFunction(std::string_view functionSignature) -> std::optional<void*>;
+
+       private:
+        constexpr static auto MainFunctionSignature{"main(Is[])I"};
+
+        void* mappedFile{nullptr};
+        void* functionVectorLocation{nullptr};
+        uint8_t* stack{nullptr};
+
+
         void LoadConstData();
         void LoadFunctionData();
-        
-        template <class T>
-        auto ResolveNativeFunction(std::string_view functionSignature) -> std::optional<T>;
     };
 }  // namespace gcl
